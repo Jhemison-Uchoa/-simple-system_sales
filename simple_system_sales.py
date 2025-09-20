@@ -14,12 +14,12 @@ def save_data():
 
 def load_data():
     with open('given.json', 'r') as g:
-        given = json.load(g)
+        data_given = json.load(g)
 
     with open('sales_relatory.json', 'r') as s:
-        sales_relatory = json.load(s)
+        data_relatory = json.load(s)
 
-    return given, sales_relatory
+    return data_given, data_relatory
 
 def pause_leave():
     input('Press enter: ')
@@ -68,7 +68,9 @@ def register_sale():
         print('Error, type a valid number')
 
     else:
-        print(given)
+        for product, value in given.items():
+            print(f'{product}: {value}')
+
         sales_relatory[seller_product] = sales_relatory.get(seller_product, 0) + 1
         save_data()
 
@@ -111,7 +113,9 @@ def register_product():
             else:
                 given[name_product].append(price_product)
                 given[name_product].append(amount_stock_product)
-                print(given)
+                for product, value in given.items():
+                    print(f'{product}: {value}')
+
                 break
 
         leave = input('want to leave[yes/no] ').lower()
@@ -124,7 +128,12 @@ def register_product():
 
 def store_menu():
     while True:
-        os.system('cls')
+        try:
+            os.system('cls')
+
+        except NameError:
+            os.system('clear')
+            
         print('-- Menu --')
         print()
         print('1- register product')
@@ -158,5 +167,10 @@ def store_menu():
             print('Error, choose a valid option')
             input('Press enter: ')
 
+if not os.path.exists('given.json'):
+    save_data()
+
 given, sales_relatory = load_data()
+
+load_data()
 store_menu()
